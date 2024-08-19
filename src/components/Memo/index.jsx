@@ -1,6 +1,6 @@
 
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 
 /**
  * 函数组件的最大弱点：渲染执行
@@ -30,14 +30,18 @@ const UseMemo = () =>{
     const [count2, setCount2] = useState(0);
 
 
-    const childData = {
+    // 只有当count2更新了才会返回一个新的引用 
+    const childData = useMemo(()=>({
       count2
-    }
+    }),[count2])
+
+    // 可以和vue的计算属性computer一样,缓存计算结果
+    const doubleCount = useMemo(()=>count2*2,[count2])
     return (
       <div>
         <h2>{count1}</h2>
         <button onClick={() => setCount1(count1 + 1)}>Increment1</button>
-      
+        {/* <ChildComponent count2={count2}/> */}
         <ChildComponent childData ={childData} />
         <button onClick={() => setCount2(count2 + 1)}>Increment</button>
       </div>
