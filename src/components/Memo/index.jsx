@@ -39,9 +39,10 @@ const UseMemo = () =>{
 
 
     // UseMemo执行的时候函数也会重新赋值引用
+    // 这里的依赖数组传空 是因为函数没要赋值新的引用，它赋不赋值新引用 功能不会变
     const cbSetCount2 = useCallback(()=>{
         setCount2(count2+1);
-    },[count2])
+    },[])
 
     // 可以和vue的计算属性computer一样,缓存计算结果
     const doubleCount = useMemo(()=>count2*2,[count2])
