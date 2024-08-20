@@ -1,6 +1,6 @@
 
 
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 /**
  * 函数组件的最大弱点：渲染执行
@@ -22,7 +22,9 @@ const ChildComponent =memo( (props)=>{
    * 
    * count1更新, UseMemo必然会执行，childData必然会赋值一个新的引用
    */
-  return <div><p>{props.childData.count2}</p></div>
+  return <div>
+    {/* <p>{props.childData.count2}</p>  */}
+    <button onClick={props.cbSetCount2}>setCount  </button></div>
 })
 
 const UseMemo = () =>{
@@ -35,6 +37,12 @@ const UseMemo = () =>{
       count2
     }),[count2])
 
+
+    // UseMemo执行的时候函数也会重新赋值引用
+    const cbSetCount2 = useCallback(()=>{
+        setCount2(count2+1);
+    },[count2])
+
     // 可以和vue的计算属性computer一样,缓存计算结果
     const doubleCount = useMemo(()=>count2*2,[count2])
     return (
@@ -42,7 +50,8 @@ const UseMemo = () =>{
         <h2>{count1}</h2>
         <button onClick={() => setCount1(count1 + 1)}>Increment1</button>
         {/* <ChildComponent count2={count2}/> */}
-        <ChildComponent childData ={childData} />
+        {/* <ChildComponent childData ={childData} /> */}
+             <ChildComponent setCount2={cbSetCount2} />
         <button onClick={() => setCount2(count2 + 1)}>Increment</button>
       </div>
     )
